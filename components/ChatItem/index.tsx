@@ -149,10 +149,17 @@ export default function ChatItem(props: any) {
                 >
                   {currentMessage.text}
                 </Text>
+                <Text
+                  style={{
+                    color: isMine ? "white" : "black",
+                    fontSize: 12,
+                    alignSelf: "flex-end",
+                  }}
+                >
+                  {new Date(currentMessage?.createdAt).toLocaleDateString()}
+                </Text>
               </View>
-              <Text>
-                {new Date(currentMessage?.createdAt).toLocaleDateString()}
-              </Text>
+
               {currentMessage?.emoji && (
                 <Pressable
                   onPress={() => {
