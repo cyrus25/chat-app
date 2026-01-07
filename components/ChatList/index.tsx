@@ -1,29 +1,23 @@
-import { useRef } from "react";
+import { forwardRef, useRef } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
-export default function ChatList({ messages, user, renderMessage }) {
+const Comp = forwardRef(function Comp({ renderMessage, messages, user }, ref) {
   const flatListRef = useRef(null);
-
-  const scrollToBottom = (isAnimated = false) => {
-    if (flatListRef?.current) {
-      flatListRef?.current?.scrollToEnd({ animated: true });
-    }
-  };
 
   return (
     <View style={styles.container}>
       <FlatList
-        ref={flatListRef}
+        ref={ref}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: "flex-end",
-          paddingBottom: 12,
+          paddingBottom: 20,
         }}
         onContentSizeChange={() => {
-          scrollToBottom(true);
+          //scrollToBottom(true);
         }}
         onEndReached={() => {
-          scrollToBottom();
+          //  scrollToBottom();
         }}
         renderItem={renderMessage}
         data={messages}
@@ -31,10 +25,12 @@ export default function ChatList({ messages, user, renderMessage }) {
       />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
 });
+
+export default Comp;

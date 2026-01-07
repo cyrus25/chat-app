@@ -6,7 +6,7 @@ import ReplyTo from "@/components/RepyTo";
 import { CURR_USER_ID } from "@/constants";
 import { chats } from "@/data";
 import { ChatItemType } from "@/types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Button,
   KeyboardAvoidingView,
@@ -26,6 +26,7 @@ import {
 export default function Page() {
   const [replyTo, setReplyingTo] = useState<ChatItemType | undefined>();
   const [inputTxt, setInputTxt] = useState("");
+  const flatListRef = useRef(null);
 
   const [showOverlay, setShowOverlay] = useState(false);
   const [messages, setMessages] = useState<ChatItemType[]>(() => {
@@ -81,6 +82,12 @@ export default function Page() {
     });
   };
 
+  const scrollToBottom = () => {
+    if (flatListRef?.current) {
+      flatListRef?.current?.scrollToEnd({ animated: true });
+    }
+  };
+
   const onSend = () => {
     const newMessage: ChatItemType = {
       _id: messages.length.toString(),
@@ -98,6 +105,9 @@ export default function Page() {
     setInputTxt("");
     setReplyingTo(undefined);
     setMessages((messages) => [...messages, newMessage]);
+    requestAnimationFrame(() => {
+      scrollToBottom();
+    });
   };
 
   const onLike = (id: string) => {
@@ -142,6 +152,7 @@ export default function Page() {
           </Pressable>
         </View>
         <ChatList
+          ref={flatListRef}
           user={{
             _id: CURR_USER_ID,
           }}
